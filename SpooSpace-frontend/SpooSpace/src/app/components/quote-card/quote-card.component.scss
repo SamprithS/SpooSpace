@@ -1,0 +1,99 @@
+.card-wrapper {
+  position: absolute;
+  inset: 0;
+  touch-action: none;
+  will-change: transform;
+}
+
+.card-inner {
+  height: 100%;
+  border-radius: 24px;
+  overflow: hidden;
+  background: var(--color-card);
+  border: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+}
+
+.card-image {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  background: linear-gradient(135deg, #c8d6e5 0%, #a8b8cc 40%, #8898aa 100%);
+  overflow: hidden;
+}
+
+.card-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, var(--color-card) 100%);
+  opacity: 0.9;
+}
+
+.card-sparkle {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+  opacity: 0.3;
+  color: var(--color-fg);
+  animation: shimmer 4s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.05); }
+}
+
+.member-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+}
+
+.member-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+.card-body {
+  padding: 24px 24px 32px;
+  flex-shrink: 0;
+}
+
+.quote-text {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  font-size: 20px;
+  font-style: italic;
+  line-height: 1.6;
+  color: var(--color-fg);
+  margin: 0;
+}
+
+.quote-meta {
+  margin-top: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta-line {
+  width: 24px;
+  height: 1px;
+  background: var(--color-gold);
+  opacity: 0.5;
+}
+
+.group-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--color-muted);
+}

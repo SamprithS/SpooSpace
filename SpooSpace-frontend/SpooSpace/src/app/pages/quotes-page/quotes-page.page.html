@@ -1,0 +1,45 @@
+<div class="page">
+  <app-star-field />
+
+  <!-- Header -->
+  <header class="header">
+    <button class="back-btn" (click)="goBack()" aria-label="Go back">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+    <h2 class="mood-title">{{ moodLabel }}</h2>
+    <div class="spacer"></div>
+  </header>
+
+  <!-- Card stack -->
+  <main class="card-area">
+    <div class="card-stack">
+      <!-- Error state -->
+      <div *ngIf="error && quotes.length === 0" class="error-state">
+        <p>{{ error }}</p>
+        <p class="error-hint">Make sure your Spring Boot server is running on port 8080.</p>
+      </div>
+
+      <!-- Loading state -->
+      <div *ngIf="!error && quotes.length === 0" class="loading-state">
+        <span class="loading-sparkle">✦</span>
+      </div>
+
+      <!-- Quote cards (render in reverse so top card is on top visually) -->
+      <ng-container *ngIf="quotes.length > 0">
+        <app-quote-card
+          *ngFor="let quote of visibleQuotes.slice().reverse(); let i = index"
+          [quote]="quote"
+          [isTop]="i === visibleQuotes.length - 1"
+          (swiped)="onSwipe()"
+        />
+      </ng-container>
+    </div>
+  </main>
+
+  <!-- Swipe hint -->
+  <div class="swipe-hint" *ngIf="quotes.length > 0">
+    <p>swipe to see next quote ✦</p>
+  </div>
+</div>

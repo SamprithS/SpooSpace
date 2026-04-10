@@ -1,0 +1,29 @@
+<div class="page">
+  <app-star-field />
+
+  <div class="theme-toggle-wrap">
+    <app-theme-toggle />
+  </div>
+
+  <header class="header">
+    <h1 class="title">How are you feeling?</h1>
+  </header>
+
+  <main class="mood-list">
+    <button
+      *ngFor="let mood of moods; let i = index"
+      class="mood-tile"
+      [style.animation-delay]="(i * 80) + 'ms'"
+      (click)="selectMood(mood.key)"
+    >
+      <span class="mood-emoji">{{ mood.emoji }}</span>
+      <div class="mood-text">
+        <h3 class="mood-label">{{ mood.label }}</h3>
+        <p class="mood-subtitle">{{ mood.subtitle }}</p>
+      </div>
+      <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18l6-6-6-6" />
+      </svg>
+    </button>
+  </main>
+</div>

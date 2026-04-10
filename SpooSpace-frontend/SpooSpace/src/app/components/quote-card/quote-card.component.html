@@ -1,0 +1,28 @@
+<div
+  class="card-wrapper"
+  [ngStyle]="cardStyle"
+  (mousedown)="onMouseDown($event)"
+  (touchstart)="onTouchStart($event)"
+  (touchmove)="onTouchMove($event)"
+  (touchend)="onTouchEnd()"
+>
+  <div class="card-inner">
+    <!-- Image / gradient area -->
+    <div class="card-image">
+      <div class="card-image-overlay"></div>
+      <div class="card-sparkle">✦</div>
+      <div class="member-badge">
+        <p class="member-name">{{ quote.memberName | uppercase }}</p>
+      </div>
+    </div>
+
+    <!-- Quote text area -->
+    <div class="card-body">
+      <blockquote class="quote-text">"{{ quote.quoteText }}"</blockquote>
+      <div class="quote-meta">
+        <div class="meta-line"></div>
+        <span class="group-name">{{ quote.groupName }}</span>
+      </div>
+    </div>
+  </div>
+</div>

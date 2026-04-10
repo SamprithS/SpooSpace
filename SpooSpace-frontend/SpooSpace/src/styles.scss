@@ -1,0 +1,49 @@
+// ─── Google Fonts ───────────────────────────────────────────────────────────
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap');
+
+// ─── CSS Variables (Light Mode) ──────────────────────────────────────────────
+:root {
+  --color-bg:      #f0eff4;
+  --color-card:    rgba(255, 255, 255, 0.82);
+  --color-fg:      #2c2c3a;
+  --color-muted:   #8a8a9a;
+  --color-border:  rgba(0, 0, 0, 0.08);
+  --color-gold:    #c8a96e;
+}
+
+// ─── Dark Mode ───────────────────────────────────────────────────────────────
+html.dark {
+  --color-bg:      #12121a;
+  --color-card:    rgba(30, 30, 42, 0.88);
+  --color-fg:      #e8e8f0;
+  --color-muted:   #6a6a7a;
+  --color-border:  rgba(255, 255, 255, 0.08);
+  --color-gold:    #c8a96e;
+}
+
+// ─── Reset & Base ────────────────────────────────────────────────────────────
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: 'DM Mono', monospace;
+  -webkit-font-smoothing: antialiased;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+button {
+  font-family: inherit;
+  outline: none;
+  background: none;
+  border: none;
+}
