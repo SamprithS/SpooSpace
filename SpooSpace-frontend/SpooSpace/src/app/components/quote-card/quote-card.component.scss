@@ -18,17 +18,29 @@
 
 .card-image {
   position: relative;
-  flex: 1;
-  min-height: 0;
+  /* Fixed height — never shrinks no matter how long the quote is */
+  height: 52%;
+  min-height: 200px;
+  flex-shrink: 0;
   background: linear-gradient(135deg, #c8d6e5 0%, #a8b8cc 40%, #8898aa 100%);
   overflow: hidden;
+}
+
+.idol-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
 }
 
 .card-image-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 50%, var(--color-card) 100%);
-  opacity: 0.9;
+  background: linear-gradient(to bottom, transparent 40%, var(--color-card) 100%);
+  opacity: 0.85;
+  z-index: 1;
 }
 
 .card-sparkle {
@@ -41,6 +53,7 @@
   opacity: 0.3;
   color: var(--color-fg);
   animation: shimmer 4s ease-in-out infinite;
+  z-index: 1;
 }
 
 @keyframes shimmer {
@@ -50,9 +63,10 @@
 
 .member-badge {
   position: absolute;
-  bottom: 16px;
+  bottom: 12px;
   left: 16px;
   right: 16px;
+  z-index: 2;
 }
 
 .member-name {
@@ -64,24 +78,36 @@
 }
 
 .card-body {
-  padding: 24px 24px 32px;
-  flex-shrink: 0;
+  flex: 1;
+  padding: 16px 20px 20px;
+  overflow-y: auto;
+  /* Hide scrollbar visually but keep it functional */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-body::-webkit-scrollbar {
+  display: none;
 }
 
 .quote-text {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 20px;
+  font-size: clamp(15px, 4vw, 19px);
   font-style: italic;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--color-fg);
   margin: 0;
 }
 
 .quote-meta {
-  margin-top: 12px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .meta-line {
@@ -96,13 +122,4 @@
   font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--color-muted);
-}
-
-.idol-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
 }
