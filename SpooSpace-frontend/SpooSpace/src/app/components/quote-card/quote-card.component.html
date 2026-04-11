@@ -15,6 +15,7 @@
         [alt]="quote.memberName"
         class="idol-photo"
       />
+      <div class="card-image-overlay"></div>
       <div *ngIf="!quote.imageUrl || quote.imageUrl === ''" class="card-sparkle">✦</div>
       <div class="member-badge">
         <p class="member-name">{{ quote.memberName | uppercase }}</p>

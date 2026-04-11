@@ -24,7 +24,12 @@
   overflow: hidden;
 }
 
-
+.card-image-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 50%, var(--color-card) 100%);
+  opacity: 0.9;
+}
 
 .card-sparkle {
   position: absolute;
