@@ -19,8 +19,15 @@ export class QuoteService {
 
   constructor(private http: HttpClient) {}
 
+  // Old method — kept in case needed elsewhere
   getRandomQuote(mood: string): Observable<QuoteDTO> {
     const params = new HttpParams().set('mood', mood);
     return this.http.get<QuoteDTO>(`${this.apiUrl}/random`, { params });
+  }
+
+  // New method — fetches ALL quotes for a mood at once
+  getAllQuotesByMood(mood: string): Observable<QuoteDTO[]> {
+    const params = new HttpParams().set('mood', mood);
+    return this.http.get<QuoteDTO[]>(`${this.apiUrl}/all`, { params });
   }
 }

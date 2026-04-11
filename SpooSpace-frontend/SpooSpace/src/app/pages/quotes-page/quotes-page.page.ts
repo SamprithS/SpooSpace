@@ -6,10 +6,10 @@ import { StarFieldComponent } from '../../components/star-field/star-field.compo
 import { QuoteCardComponent } from '../../components/quote-card/quote-card.component';
 
 const MOOD_LABELS: Record<string, string> = {
-  COMFORT: 'Comfort',
-  CONFIDENCE: 'Confidence',
-  SOFT: 'Soft',
-  HAPPY: 'Happy',
+  COMFORT:     'Comfort',
+  CONFIDENCE:  'Confidence',
+  SOFT:        'Soft',
+  HAPPY:       'Happy',
   INSPIRATION: 'Inspiration',
 };
 
@@ -17,15 +17,159 @@ const MOOD_LABELS: Record<string, string> = {
   selector: 'app-quotes-page',
   standalone: true,
   imports: [CommonModule, StarFieldComponent, QuoteCardComponent],
-  templateUrl: './quotes-page.page.html',
-  styleUrls: ['./quotes-page.page.scss']
+  template: `
+    <div class="page">
+      <app-star-field />
+
+      <header class="header">
+        <button class="back-btn" (click)="goBack()" aria-label="Go back">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+               stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <h2 class="mood-title">{{ moodLabel }}</h2>
+        <div class="spacer"></div>
+      </header>
+
+      <main class="card-area">
+        <div class="card-stack">
+
+          <!-- Loading -->
+          <div *ngIf="isLoading" class="center-state">
+            <span class="loading-sparkle">✦</span>
+          </div>
+
+          <!-- Error -->
+          <div *ngIf="error && !isLoading" class="center-state error-state">
+            <p>Could not reach the server.</p>
+            <p class="hint">Is Spring Boot running on port 8080?</p>
+          </div>
+
+          <!-- Cards -->
+          <ng-container *ngIf="!isLoading && visibleQuotes.length > 0">
+            <app-quote-card
+              *ngFor="let quote of visibleQuotes.slice().reverse(); let i = index"
+              [quote]="quote"
+              [isTop]="i === visibleQuotes.length - 1"
+              (swiped)="onSwipe()"
+            />
+          </ng-container>
+
+        </div>
+      </main>
+
+      <div class="swipe-hint" *ngIf="!isLoading && visibleQuotes.length > 0">
+        <p>{{ currentIndex + 1 }} / {{ queue.length }} &nbsp;·&nbsp; swipe to see next quote ✦</p>
+      </div>
+    </div>
+  `,
+  styles: [`
+    .page {
+      position: relative;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      background: var(--color-bg);
+      overflow: hidden;
+    }
+    .header {
+      position: relative;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 48px 24px 16px;
+    }
+    .back-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--color-muted);
+      padding: 4px;
+      display: flex;
+      align-items: center;
+      transition: color 0.2s ease;
+    }
+    .back-btn:hover { color: var(--color-fg); }
+    .mood-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 18px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      color: var(--color-fg);
+      margin: 0;
+    }
+    .spacer { width: 28px; }
+    .card-area {
+      position: relative;
+      z-index: 10;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 24px 96px;
+    }
+    .card-stack {
+      position: relative;
+      width: 100%;
+      max-width: 360px;
+      height: 60dvh;
+    }
+    .center-state {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-align: center;
+      padding: 24px;
+    }
+    .loading-sparkle {
+      font-size: 40px;
+      color: var(--color-muted);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50%       { opacity: 0.8; transform: scale(1.1); }
+    }
+    .error-state p {
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--color-muted);
+      margin: 0;
+    }
+    .error-state .hint {
+      font-size: 11px;
+      opacity: 0.6;
+    }
+    .swipe-hint {
+      position: fixed;
+      bottom: 40px;
+      left: 0;
+      right: 0;
+      z-index: 20;
+      text-align: center;
+    }
+    .swipe-hint p {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      color: var(--color-muted);
+      opacity: 0.6;
+      margin: 0;
+      letter-spacing: 0.05em;
+    }
+  `]
 })
 export class QuotesPageComponent implements OnInit {
   mood = '';
   moodLabel = '';
-  quotes: QuoteDTO[] = [];
+  queue: QuoteDTO[] = [];
   currentIndex = 0;
-  isLoading = false;
+  isLoading = true;
   error = '';
 
   constructor(
@@ -35,52 +179,52 @@ export class QuotesPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.mood = this.route.snapshot.paramMap.get('mood') || 'COMFORT';
-    this.moodLabel = MOOD_LABELS[this.mood] || this.mood;
-    // Pre-fetch a few quotes to have a stack ready
-    this.fetchQuote();
-    this.fetchQuote();
+    this.mood = this.route.snapshot.paramMap.get('mood') ?? 'COMFORT';
+    this.moodLabel = MOOD_LABELS[this.mood] ?? this.mood;
+    this.loadAllQuotes();
   }
 
-  fetchQuote(): void {
-    this.quoteService.getRandomQuote(this.mood).subscribe({
-      next: (q) => {
-        this.quotes.push(q);
+  loadAllQuotes(): void {
+    this.isLoading = true;
+    this.quoteService.getAllQuotesByMood(this.mood).subscribe({
+      next: (quotes: QuoteDTO[]) => {
+        this.queue = this.shuffle(quotes);
+        this.currentIndex = 0;
+        this.isLoading = false;
       },
       error: () => {
-        // If backend isn't up, show a placeholder
-        if (this.quotes.length === 0) {
-          this.error = 'Could not reach the server. Is Spring Boot running?';
-        }
+        this.error = 'Could not reach server.';
+        this.isLoading = false;
       }
     });
   }
 
   get visibleQuotes(): QuoteDTO[] {
-    return this.quotes.slice(this.currentIndex, this.currentIndex + 2);
+    // Show current card and the next one behind it as a stack
+    return this.queue.slice(this.currentIndex, this.currentIndex + 2);
   }
 
   onSwipe(): void {
-    this.currentIndex++;
-    // Pre-fetch next quote from backend to keep the stack fed
-    this.fetchQuote();
-
-    // If we're running low, cycle back as well
-    if (this.currentIndex >= this.quotes.length - 1) {
+    const nextIndex = this.currentIndex + 1;
+    if (nextIndex >= this.queue.length) {
+      // Seen all quotes — reshuffle and start again
+      this.queue = this.shuffle([...this.queue]);
       this.currentIndex = 0;
-      this.quotes = this.shuffle([...this.quotes]);
+    } else {
+      this.currentIndex = nextIndex;
     }
-  }
-
-  private shuffle<T>(arr: T[]): T[] {
-    for (let i = arr.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [arr[i], arr[j]] = [arr[j], arr[i]];
-    }
-    return arr;
   }
 
   goBack(): void {
     this.router.navigate(['/']);
+  }
+
+  private shuffle<T>(arr: T[]): T[] {
+    const copy = [...arr];
+    for (let i = copy.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
   }
 }
