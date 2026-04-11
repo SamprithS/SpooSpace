@@ -9,8 +9,14 @@
   <div class="card-inner">
     <!-- Image / gradient area -->
     <div class="card-image">
+      <img
+        *ngIf="quote.imageUrl && quote.imageUrl !== ''"
+        [src]="quote.imageUrl"
+        [alt]="quote.memberName"
+        class="idol-photo"
+      />
       <div class="card-image-overlay"></div>
-      <div class="card-sparkle">✦</div>
+      <div *ngIf="!quote.imageUrl || quote.imageUrl === ''" class="card-sparkle">✦</div>
       <div class="member-badge">
         <p class="member-name">{{ quote.memberName | uppercase }}</p>
       </div>
