@@ -1,0 +1,6 @@
+2026-04-11 12:29:03.915143+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUOTES" not found (this database is empty); SQL statement:
+INSERT INTO quotes (quote_text, member_name, group_name, mood, image_url) VALUES ('Your presence can give happiness.', 'Jin', 'BTS', 'COMFORT', 'https://placehold.co/600x400') [42104-224]
+2026-04-11 12:31:45.000993+05:30 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "QUOTES" not found (this database is empty); SQL statement:
+INSERT INTO quotes (quote_text, member_name, group_name, mood, image_url) VALUES ('Your presence can give happiness.', 'Jin', 'BTS', 'COMFORT', 'https://placehold.co/600x400') [42104-224]
