@@ -1,11 +1,11 @@
 {
   "name": "SpooSpace",
   "short_name": "SpooSpace",
-  "description": "TXT Kpop quotes for every mood",
+  "description": "TXT quotes for every mood",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#f0eff4",
-  "theme_color": "#f0eff4",
+  "background_color": "#eceef8",
+  "theme_color": "#eceef8",
   "orientation": "portrait",
   "icons": [
     {
