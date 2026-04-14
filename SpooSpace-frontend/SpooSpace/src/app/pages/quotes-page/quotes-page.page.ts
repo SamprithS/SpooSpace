@@ -34,19 +34,13 @@ const MOOD_LABELS: Record<string, string> = {
 
       <main class="card-area">
         <div class="card-stack">
-
-          <!-- Loading -->
           <div *ngIf="isLoading" class="center-state">
             <span class="loading-sparkle">✦</span>
           </div>
-
-          <!-- Error -->
           <div *ngIf="error && !isLoading" class="center-state error-state">
             <p>Could not reach the server.</p>
             <p class="hint">Is Spring Boot running on port 8080?</p>
           </div>
-
-          <!-- Cards -->
           <ng-container *ngIf="!isLoading && visibleQuotes.length > 0">
             <app-quote-card
               *ngFor="let quote of visibleQuotes.slice().reverse(); let i = index"
@@ -55,7 +49,6 @@ const MOOD_LABELS: Record<string, string> = {
               (swiped)="onSwipe()"
             />
           </ng-container>
-
         </div>
       </main>
 
@@ -70,8 +63,9 @@ const MOOD_LABELS: Record<string, string> = {
       min-height: 100dvh;
       display: flex;
       flex-direction: column;
-      background: var(--color-bg);
+      background: var(--color-bg-gradient, var(--color-bg));
       overflow: hidden;
+      transition: background 0.5s ease;
     }
     .header {
       position: relative;
@@ -91,7 +85,7 @@ const MOOD_LABELS: Record<string, string> = {
       align-items: center;
       transition: color 0.2s ease;
     }
-    .back-btn:hover { color: var(--color-fg); }
+    .back-btn:hover { color: var(--color-gold); }
     .mood-title {
       font-family: 'Cormorant Garamond', Georgia, serif;
       font-size: 18px;
@@ -99,6 +93,7 @@ const MOOD_LABELS: Record<string, string> = {
       letter-spacing: 0.05em;
       color: var(--color-fg);
       margin: 0;
+      transition: color 0.3s ease;
     }
     .spacer { width: 28px; }
     .card-area {
@@ -129,7 +124,7 @@ const MOOD_LABELS: Record<string, string> = {
     }
     .loading-sparkle {
       font-size: 40px;
-      color: var(--color-muted);
+      color: var(--color-gold);
       animation: pulse 2s ease-in-out infinite;
     }
     @keyframes pulse {
@@ -142,10 +137,7 @@ const MOOD_LABELS: Record<string, string> = {
       color: var(--color-muted);
       margin: 0;
     }
-    .error-state .hint {
-      font-size: 11px;
-      opacity: 0.6;
-    }
+    .error-state .hint { font-size: 11px; opacity: 0.6; }
     .swipe-hint {
       position: fixed;
       bottom: 40px;
@@ -200,14 +192,12 @@ export class QuotesPageComponent implements OnInit {
   }
 
   get visibleQuotes(): QuoteDTO[] {
-    // Show current card and the next one behind it as a stack
     return this.queue.slice(this.currentIndex, this.currentIndex + 2);
   }
 
   onSwipe(): void {
     const nextIndex = this.currentIndex + 1;
     if (nextIndex >= this.queue.length) {
-      // Seen all quotes — reshuffle and start again
       this.queue = this.shuffle([...this.queue]);
       this.currentIndex = 0;
     } else {

@@ -1,0 +1,40 @@
+<div class="picker-wrap">
+  <!-- Trigger button -->
+  <button class="trigger-btn" (click)="toggleDropdown()" [class.open]="isOpen" aria-label="Change album theme">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="12" cy="12" r="3"/>
+      <path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+    </svg>
+    <span class="trigger-label">{{ activeTheme.label }}</span>
+    <svg class="chevron" [class.rotated]="isOpen" width="12" height="12" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M6 9l6 6 6-6"/>
+    </svg>
+  </button>
+
+  <!-- Dropdown -->
+  <div class="dropdown" [class.visible]="isOpen">
+    <p class="dropdown-header">Choose Album Theme</p>
+    <div class="theme-list">
+      <button
+        *ngFor="let theme of themes"
+        class="theme-item"
+        [class.active]="theme.id === themeService.activeThemeId"
+        (click)="selectTheme(theme)"
+      >
+        <span
+          class="theme-swatch"
+          [style.background]="theme.light.bgGradient || theme.light.bg"
+          [style.border-color]="theme.light.gold"
+        ></span>
+        <span class="theme-name">{{ theme.label }}</span>
+        <svg *ngIf="theme.id === themeService.activeThemeId"
+             class="check-icon" width="14" height="14" viewBox="0 0 24 24"
+             fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,27 +1,17 @@
-// ─── Google Fonts ───────────────────────────────────────────────────────────
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=DM+Mono:wght@300;400&display=swap');
 
-// ─── CSS Variables (Light Mode) ──────────────────────────────────────────────
+/* ── Default theme (Sanctuary light) ── */
 :root {
-  --color-bg:      #f0eff4;
-  --color-card:    rgba(255, 255, 255, 0.82);
-  --color-fg:      #2c2c3a;
-  --color-muted:   #8a8a9a;
-  --color-border:  rgba(0, 0, 0, 0.08);
-  --color-gold:    #c8a96e;
+  --color-bg:           #eceef8;
+  --color-bg-gradient:  linear-gradient(135deg, #eceef8 0%, #dde0f5 50%, #ece5f5 100%);
+  --color-card:         rgba(255, 255, 255, 0.82);
+  --color-fg:           #2c2c3a;
+  --color-muted:        #8a8a9a;
+  --color-border:       rgba(0, 0, 0, 0.08);
+  --color-gold:         #c8a96e;
 }
 
-// ─── Dark Mode ───────────────────────────────────────────────────────────────
-html.dark {
-  --color-bg:      #12121a;
-  --color-card:    rgba(30, 30, 42, 0.88);
-  --color-fg:      #e8e8f0;
-  --color-muted:   #6a6a7a;
-  --color-border:  rgba(255, 255, 255, 0.08);
-  --color-gold:    #c8a96e;
-}
-
-// ─── Reset & Base ────────────────────────────────────────────────────────────
+/* ── Reset ── */
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
@@ -34,11 +24,12 @@ html, body {
 }
 
 body {
-  background: var(--color-bg);
+  background: var(--color-bg-gradient, var(--color-bg));
   color: var(--color-fg);
   font-family: 'DM Mono', monospace;
   -webkit-font-smoothing: antialiased;
-  transition: background 0.3s ease, color 0.3s ease;
+  /* Smooth transition when theme changes */
+  transition: background 0.5s ease, color 0.3s ease;
 }
 
 button {
