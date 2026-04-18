@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { QuoteService, QuoteDTO } from '../../services/quote.service';
 import { StarFieldComponent } from '../../components/star-field/star-field.component';
 import { QuoteCardComponent } from '../../components/quote-card/quote-card.component';
+import { QuoteSkeletonComponent } from '../../components/quote-skeleton/quote-skeleton.component';
 
 const MOOD_LABELS: Record<string, string> = {
   COMFORT:     'Comfort',
@@ -16,7 +17,7 @@ const MOOD_LABELS: Record<string, string> = {
 @Component({
   selector: 'app-quotes-page',
   standalone: true,
-  imports: [CommonModule, StarFieldComponent, QuoteCardComponent],
+  imports: [CommonModule, StarFieldComponent, QuoteCardComponent, QuoteSkeletonComponent],
   template: `
     <div class="page">
       <app-star-field />
@@ -34,9 +35,7 @@ const MOOD_LABELS: Record<string, string> = {
 
       <main class="card-area">
         <div class="card-stack">
-          <div *ngIf="isLoading" class="center-state">
-            <span class="loading-sparkle">✦</span>
-          </div>
+          <app-quote-skeleton *ngIf="isLoading" />
           <div *ngIf="error && !isLoading" class="center-state error-state">
             <p>Could not reach the server.</p>
             <p class="hint">Is Spring Boot running on port 8080?</p>
@@ -110,26 +109,6 @@ const MOOD_LABELS: Record<string, string> = {
       width: 100%;
       max-width: 360px;
       height: 60dvh;
-    }
-    .center-state {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-align: center;
-      padding: 24px;
-    }
-    .loading-sparkle {
-      font-size: 40px;
-      color: var(--color-gold);
-      animation: pulse 2s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 0.3; transform: scale(1); }
-      50%       { opacity: 0.8; transform: scale(1.1); }
     }
     .error-state p {
       font-family: 'DM Mono', monospace;
