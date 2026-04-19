@@ -7,7 +7,19 @@
   (touchend)="onTouchEnd()"
 >
   <div class="card-inner">
-    <!-- Image / gradient area -->
+
+    <!-- Glow overlay — sits on top of everything, colour changes on drag -->
+    <div class="swipe-glow" [ngStyle]="glowStyle"></div>
+
+    <!-- Direction arrow — appears as you drag -->
+    <div class="direction-label direction-left" [ngStyle]="directionLabelStyle">
+      <span *ngIf="swipeDirection === 'left'">←</span>
+    </div>
+    <div class="direction-label direction-right" [ngStyle]="directionLabelStyle">
+      <span *ngIf="swipeDirection === 'right'">→</span>
+    </div>
+
+    <!-- Image area -->
     <div class="card-image">
       <img
         *ngIf="quote.imageUrl && quote.imageUrl !== ''"
@@ -30,5 +42,6 @@
         <span class="group-name">{{ quote.groupName }}</span>
       </div>
     </div>
+
   </div>
 </div>

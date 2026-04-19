@@ -6,6 +6,7 @@
 }
 
 .card-inner {
+  position: relative;
   height: 100%;
   border-radius: 24px;
   overflow: hidden;
@@ -16,12 +17,61 @@
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
 }
 
+// Colour glow overlay — covers the whole card
+.swipe-glow {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none;
+  border-radius: 24px;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+// Direction arrows shown while dragging
+.direction-label {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 21;
+  pointer-events: none;
+  font-size: 28px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+
+  span {
+    display: block;
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+  }
+
+  &.direction-left {
+    left: 20px;
+    color: #ef4444;
+  }
+
+  &.direction-right {
+    right: 20px;
+    color: #22c55e;
+  }
+}
+
 .card-image {
   position: relative;
-  flex: 1;
-  min-height: 0;
+  height: 52%;
+  min-height: 200px;
+  flex-shrink: 0;
   background: linear-gradient(135deg, #c8d6e5 0%, #a8b8cc 40%, #8898aa 100%);
   overflow: hidden;
+}
+
+.idol-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
 }
 
 .card-image-overlay {
@@ -45,14 +95,15 @@
 
 @keyframes shimmer {
   0%, 100% { opacity: 0.2; transform: scale(1); }
-  50% { opacity: 0.4; transform: scale(1.05); }
+  50%       { opacity: 0.4; transform: scale(1.05); }
 }
 
 .member-badge {
   position: absolute;
-  bottom: 16px;
+  bottom: 12px;
   left: 16px;
   right: 16px;
+  z-index: 2;
 }
 
 .member-name {
@@ -64,24 +115,35 @@
 }
 
 .card-body {
-  padding: 24px 24px 32px;
-  flex-shrink: 0;
+  flex: 1;
+  padding: 16px 20px 20px;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-body::-webkit-scrollbar {
+  display: none;
 }
 
 .quote-text {
   font-family: 'Cormorant Garamond', Georgia, serif;
-  font-size: 20px;
+  font-size: clamp(15px, 4vw, 19px);
   font-style: italic;
-  line-height: 1.6;
+  line-height: 1.55;
   color: var(--color-fg);
   margin: 0;
 }
 
 .quote-meta {
-  margin-top: 12px;
+  margin-top: 10px;
   display: flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .meta-line {
@@ -96,13 +158,4 @@
   font-size: 11px;
   letter-spacing: 0.1em;
   color: var(--color-muted);
-}
-
-.idol-photo {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
 }
