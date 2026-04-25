@@ -15,7 +15,7 @@ export interface QuoteDTO {
   providedIn: 'root'
 })
 export class QuoteService {
-  private apiUrl = 'https://spoospace-production-e89c.up.railway.app/api/v1/quotes';
+  private apiUrl = 'https://spoospace-backend.onrender.com/api/v1/quotes';
 
   constructor(private http: HttpClient) {}
 
