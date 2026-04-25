@@ -11,7 +11,7 @@ import java.util.Optional;
 
 @Repository
 public interface QuoteRepository extends JpaRepository<Quote, Long> {
-    @Query(value = "SELECT * FROM quotes WHERE mood = :mood ORDER BY RANDOM() LIMIT 1", nativeQuery = true)
+    @Query(value = "SELECT * FROM quotes WHERE mood = :mood ORDER BY RAND() LIMIT 1", nativeQuery = true)
     Optional<Quote> findRandomByMood(@Param("mood") String mood);
 
     @Query(value = "SELECT * FROM quotes WHERE mood = :mood", nativeQuery = true)
